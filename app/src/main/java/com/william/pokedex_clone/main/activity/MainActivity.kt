@@ -1,7 +1,8 @@
-package com.william.pokedex_clone
+package com.william.pokedex_clone.main.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.william.pokedex_clone.R
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
