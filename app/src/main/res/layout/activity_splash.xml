@@ -5,7 +5,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".splash.activity.SplashActivity"
+        tools:context=".module.splash.activity.SplashActivity"
         android:background="@color/poke_red_500"
         android:gravity="center"
         android:orientation="vertical">

@@ -1,4 +1,4 @@
-package com.william.pokedex_clone.splash.activity
+package com.william.pokedex_clone.module.splash.activity
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -8,7 +8,7 @@ import android.view.animation.AnimationUtils
 import androidx.databinding.DataBindingUtil
 import com.william.pokedex_clone.R
 import com.william.pokedex_clone.databinding.ActivitySplashBinding
-import com.william.pokedex_clone.main.activity.MainActivity
+import com.william.pokedex_clone.module.main.activity.MainActivity
 
 class SplashActivity : AppCompatActivity() {
     lateinit var splashBinding: ActivitySplashBinding
@@ -16,10 +16,10 @@ class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
-        setActionBar(null)
 
         splashBinding = DataBindingUtil.setContentView(this, R.layout.activity_splash)
 
+//        fade in animation
         val animtopOut = AnimationUtils.loadAnimation(this, R.anim.anim_translate)
         splashBinding.logo.animation = animtopOut
 
