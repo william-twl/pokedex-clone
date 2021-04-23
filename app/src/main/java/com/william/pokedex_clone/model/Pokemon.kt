@@ -1,16 +1,60 @@
 package com.william.pokedex_clone.model
 
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
-data class Pokemon(
+data class GeneralObject(
     var name: String?,
-    @SerializedName("url")
-    var pokemonUrl: String?
-)
+    var url: String?
+): Serializable
 
 data class PokemonListCover(
     var count: Int?,
     var next: String?,
     var previous: String?,
-    var results: ArrayList<Pokemon?>?
-)
+    var results: ArrayList<GeneralObject?>?
+): Serializable
+
+data class PokemonCover(
+    var abilities: ArrayList<AbilityObject?>?,
+    var moves: ArrayList<MoveObject?>?,
+    var sprites: SpriteObject?
+): Serializable
+
+data class AbilityObject(
+    var ability: GeneralObject?
+): Serializable
+
+data class MoveObject (
+    var move: GeneralObject?
+): Serializable
+
+data class SpriteObject(
+    @SerializedName("back_default")
+    var backDefault: String?,
+    @SerializedName("front_default")
+    var frontDefault: String?
+): Serializable
+
+data class PokemonAbilityCover(
+    @SerializedName("effect_entries")
+    var effectEntries: ArrayList<EffectEntry?>?,
+    var name: String?
+): Serializable
+
+data class EffectEntry(
+    var effect: String?
+): Serializable
+
+data class PokemonMoveCover(
+    @SerializedName("effect_entries")
+    var effectEntries: ArrayList<EffectEntry?>?,
+    var name: String?,
+    var type: AttackTypeObject?
+): Serializable
+
+data class AttackTypeObject(
+    var name: String?
+): Serializable
+
+
