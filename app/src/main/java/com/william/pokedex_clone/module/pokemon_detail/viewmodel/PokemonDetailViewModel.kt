@@ -24,13 +24,4 @@ class PokemonDetailViewModel(private val pokemonDetailRepository: PokemonDetailR
             emit(Resource.error(data = null, message = exception.message ?: "Error Occurred!"))
         }
     }
-
-    fun getPokemonMoveDetail(id: String?) = liveData(Dispatchers.IO) {
-        emit(Resource.loading(data = null))
-        try {
-            emit(Resource.success(data = pokemonDetailRepository.getPokemonMoveDetail(id)))
-        } catch (exception: Exception) {
-            emit(Resource.error(data = null, message = exception.message ?: "Error Occurred!"))
-        }
-    }
 }

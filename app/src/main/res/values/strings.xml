@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">PokeDex</string>
     <string name="pokemon_list">Pokemon List</string>
+    <string name="error_occurred">Error Occurred</string>
+    <string name="pokemon_detail">Pokemon Detail</string>
+    <string name="ability_tab_text">Ability %s</string>
+    <string name="move_tab_text">Move %s</string>
+    <string name="type_colon">Type :&#160;</string>
 </resources>

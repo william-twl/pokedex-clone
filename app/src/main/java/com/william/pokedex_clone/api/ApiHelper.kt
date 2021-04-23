@@ -5,7 +5,5 @@ class ApiHelper(private val apiService: ApiService) {
 
     suspend fun getPokemon(id: String?) = apiService.getPokemon(id)
 
-    suspend fun getPokemonMoveDetail(id: String?) = apiService.getPokemonMoveDetail(id)
-
     suspend fun getPokemonAbilityDetail(id: String?) = apiService.getPokemonAbilityDetail(id)
 }

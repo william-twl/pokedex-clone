@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable name="pokemon" type="com.william.pokedex_clone.model.PokemonCover"/>
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".module.main.activity.MainActivity">
+
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipeRefreshLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <androidx.core.widget.NestedScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:fillViewport="true">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:paddingVertical="15dp">
+
+                        <com.facebook.drawee.view.SimpleDraweeView
+                            android:id="@+id/icon"
+                            android:layout_width="100dp"
+                            android:layout_height="100dp"
+                            android:layout_gravity="center_horizontal"
+                            app:placeholderImage="@mipmap/ic_launcher_pokeball"
+                            app:actualImageScaleType="centerCrop"
+                            app:placeholderImageScaleType="centerCrop"/>
+
+                        <com.google.android.material.tabs.TabLayout
+                            android:id="@+id/abilityTabLayout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            app:tabGravity="fill"
+                            app:tabIndicatorColor="@color/poke_red_500"
+                            app:tabMode="fixed"
+                            app:tabRippleColor="@android:color/white"
+                            app:tabSelectedTextColor="@color/poke_red_500"
+                            app:tabTextAppearance="?android:textAppearanceSmall"
+                            app:tabTextColor="@android:color/black" />
+
+                        <androidx.viewpager.widget.ViewPager
+                            android:id="@+id/abilityViewPager"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginTop="1dp"/>
+
+                    </LinearLayout>
+                </androidx.core.widget.NestedScrollView>
+
+                <RelativeLayout
+                    android:id="@+id/loading"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/white"
+                    android:visibility="gone">
+                    <ProgressBar
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:padding="16dp" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/error_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/white"
+                    android:visibility="gone">
+                    <TextView
+                        android:text="@string/error_occurred"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="20sp"
+                        android:layout_centerInParent="true"/>
+                </RelativeLayout>
+            </RelativeLayout>
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+    </LinearLayout>
+</layout>

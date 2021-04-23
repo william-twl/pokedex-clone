@@ -17,16 +17,12 @@ data class PokemonListCover(
 
 data class PokemonCover(
     var abilities: ArrayList<AbilityObject?>?,
-    var moves: ArrayList<MoveObject?>?,
-    var sprites: SpriteObject?
+    var sprites: SpriteObject?,
+    var name: String?
 ): Serializable
 
 data class AbilityObject(
     var ability: GeneralObject?
-): Serializable
-
-data class MoveObject (
-    var move: GeneralObject?
 ): Serializable
 
 data class SpriteObject(
@@ -43,7 +39,13 @@ data class PokemonAbilityCover(
 ): Serializable
 
 data class EffectEntry(
-    var effect: String?
+    @SerializedName("effect")
+    var effectString: String?,
+    var language: LanguageObject?
+): Serializable
+
+data class LanguageObject(
+    var name: String?
 ): Serializable
 
 data class PokemonMoveCover(

@@ -21,6 +21,6 @@ fun String.returnId(): String {
         val stringArray = this.split("/")
         if (stringArray.isEmpty())
             "0"
-        else stringArray[stringArray.size - 1]
+        else stringArray[stringArray.size - 2]
     } else "0"
 }
