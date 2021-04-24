@@ -3,25 +3,36 @@ package com.william.pokedex_clone.module.main.activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
+import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.william.pokedex_clone.MyApplication
 import com.william.pokedex_clone.R
 import com.william.pokedex_clone.api.ApiHelper
 import com.william.pokedex_clone.api.RetrofitBuilder
 import com.william.pokedex_clone.databinding.ActivityMainBinding
+import com.william.pokedex_clone.enum.EventBusAction
 import com.william.pokedex_clone.enum.Status
+import com.william.pokedex_clone.event.ActionEvent
 import com.william.pokedex_clone.listener.OnClickListener
+import com.william.pokedex_clone.listener.OnFavouriteClickListener
+import com.william.pokedex_clone.listener.OnLongClickListener
 import com.william.pokedex_clone.model.GeneralObject
+import com.william.pokedex_clone.module.favourite.activity.FavouriteListActivity
 import com.william.pokedex_clone.module.main.adapter.PokemonListAdapter
 import com.william.pokedex_clone.module.main.viewmodel.MainViewModel
 import com.william.pokedex_clone.module.main.viewmodel.MainViewModelFactory
 import com.william.pokedex_clone.module.pokemon_detail.activity.PokemonDetailActivity
 import com.william.pokedex_clone.utils.GlobalIntent
 import com.william.pokedex_clone.utils.toCapitalise
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
 
 class MainActivity : AppCompatActivity() {
     lateinit var viewModel: MainViewModel
@@ -51,21 +62,54 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupRecyclerView() {
         mainBinding.recyclerView.layoutManager = LinearLayoutManager(this)
-        adapter = PokemonListAdapter(pokemonList, object : OnClickListener<GeneralObject?> {
+        adapter = PokemonListAdapter(pokemonList,
+            MyApplication.instance.favouriteList,
+            object : OnClickListener<GeneralObject?> {
             override fun onItemClicked(data: GeneralObject?, position: Int) {
                 val intent = Intent(this@MainActivity, PokemonDetailActivity::class.java)
                 intent.putExtra(GlobalIntent.INTENT_GENERAL_OBJECT, data)
                 startActivity(intent)
             }
+        }, object : OnFavouriteClickListener<GeneralObject?> {
+            override fun onFavouriteClicked(data: GeneralObject?, position: Int) {
+                updateFavouriteList(data)
+            }
+
         })
         mainBinding.recyclerView.adapter = adapter
         mainBinding.recyclerView
+    }
+
+    private fun updateFavouriteList(data: GeneralObject?) {
+        if (MyApplication.instance.favouriteList?.contains(data) == true) {
+            MyApplication.instance.favouriteList?.remove(data)
+            runToast(getString(R.string.removed_from_favourite, data?.name?:""))
+        } else {
+            MyApplication.instance.favouriteList?.add(data)
+            runToast(getString(R.string.added_to_favourite, data?.name?:""))
+        }
+
+        adapter.notifyDataSetChanged()
     }
 
     private fun setupRefreshLayout() {
         mainBinding.swipeRefreshLayout.setOnRefreshListener {
             getPokemonList()
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_main, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.toFavourite -> {
+                startActivity(Intent(this@MainActivity, FavouriteListActivity::class.java))
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     private fun getPokemonList() {
@@ -81,7 +125,7 @@ class MainActivity : AppCompatActivity() {
                     Status.ERROR -> {
                         toggleProgress(false)
                         toggleError(true)
-                        Toast.makeText(this, it.message, Toast.LENGTH_LONG).show()
+                        runToast(it.message)
                     }
 
                     Status.LOADING -> {
@@ -112,5 +156,43 @@ class MainActivity : AppCompatActivity() {
             pokemonList.addAll(it)
         }
         adapter.notifyDataSetChanged()
+    }
+
+//    General Function To Toast Message
+    private fun runToast(message: String?) {
+        Toast.makeText(this, message?:"", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onStart() {
+        try {
+            super.onStart()
+            if (!EventBus.getDefault().isRegistered(this)) {
+                EventBus.getDefault().register(this)
+            }
+        } catch (e: Exception) {
+        }
+
+    }
+
+    override fun onDestroy() {
+        try {
+            if (EventBus.getDefault().isRegistered(this)) {
+                EventBus.getDefault().unregister(this)
+            }
+            super.onDestroy()
+        } catch (e: Exception) {
+        }
+
+    }
+
+    @Subscribe
+    fun onEvent(event: ActionEvent?) {
+        if (event == null) return
+        when (event.action) {
+            EventBusAction.UPDATE_MAIN_LIST -> {
+                adapter.notifyDataSetChanged()
+            }
+        }
+
     }
 }

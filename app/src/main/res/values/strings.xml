@@ -6,4 +6,10 @@
     <string name="ability_tab_text">Ability %s</string>
     <string name="move_tab_text">Move %s</string>
     <string name="type_colon">Type :&#160;</string>
+    <string name="favourite_list">Favourite List</string>
+    <string name="add_to_favourite">Add To Favourite</string>
+    <string name="remove_from_favourite">Remove From Favourite</string>
+    <string name="added_to_favourite">Added %s To Favourite</string>
+    <string name="removed_from_favourite">Removed %s From Favourite</string>
+    <string name="no_data">No Data</string>
 </resources>

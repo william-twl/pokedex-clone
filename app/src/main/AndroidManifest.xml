@@ -11,8 +11,11 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_pokeball"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Pokedexclone">
-        <activity android:name=".module.pokemon_detail.activity.PokemonDetailActivity"/>
+        android:theme="@style/Theme.Pokedexclone"
+        android:fullBackupContent="false">
+        <activity android:name=".module.favourite.activity.FavouriteListActivity"/>
+
+        <activity android:name=".module.pokemon_detail.activity.PokemonDetailActivity" />
         <activity
             android:name=".module.splash.activity.SplashActivity"
             android:theme="@style/Theme.Design.NoActionBar">
