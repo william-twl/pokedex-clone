@@ -5,7 +5,7 @@ import com.william.pokedex_clone.model.GeneralObject
 import java.util.*
 import kotlin.collections.ArrayList
 
-//  Capitalise first letter of every name String within Pokemon Array List
+//  Capitalise first letter of every name String within General Object Array List
 fun ArrayList<GeneralObject?>?.toCapitalise(): ArrayList<GeneralObject?> {
     val arrayList = arrayListOf<GeneralObject?>()
     this?.forEach { pokemon ->

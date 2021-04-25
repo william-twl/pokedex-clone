@@ -12,4 +12,7 @@
     <string name="added_to_favourite">Added %s To Favourite</string>
     <string name="removed_from_favourite">Removed %s From Favourite</string>
     <string name="no_data">No Data</string>
+    <string name="sort_default">Default</string>
+    <string name="sort_by_name_ascending">Sort By Name A - Z</string>
+    <string name="sort_by_name_descending">Sort By Name Z - A</string>
 </resources>

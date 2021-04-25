@@ -6,8 +6,10 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.AdapterView
 import android.widget.PopupMenu
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -16,8 +18,10 @@ import com.william.pokedex_clone.MyApplication
 import com.william.pokedex_clone.R
 import com.william.pokedex_clone.api.ApiHelper
 import com.william.pokedex_clone.api.RetrofitBuilder
+import com.william.pokedex_clone.base.BaseDropDownAdapter
 import com.william.pokedex_clone.databinding.ActivityMainBinding
 import com.william.pokedex_clone.enum.EventBusAction
+import com.william.pokedex_clone.enum.SortEnum
 import com.william.pokedex_clone.enum.Status
 import com.william.pokedex_clone.event.ActionEvent
 import com.william.pokedex_clone.listener.OnClickListener
@@ -29,8 +33,7 @@ import com.william.pokedex_clone.module.main.adapter.PokemonListAdapter
 import com.william.pokedex_clone.module.main.viewmodel.MainViewModel
 import com.william.pokedex_clone.module.main.viewmodel.MainViewModelFactory
 import com.william.pokedex_clone.module.pokemon_detail.activity.PokemonDetailActivity
-import com.william.pokedex_clone.utils.GlobalIntent
-import com.william.pokedex_clone.utils.toCapitalise
+import com.william.pokedex_clone.utils.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 
@@ -41,6 +44,8 @@ class MainActivity : AppCompatActivity() {
 
     var pokemonList = ArrayList<GeneralObject?>()
 
+    private var sortEnum: SortEnum = SortEnum.DEFAULT
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -50,6 +55,8 @@ class MainActivity : AppCompatActivity() {
         setupViewModel()
         setupRecyclerView()
         setupRefreshLayout()
+        setupSortListener()
+        setupSortSpinner()
         getPokemonList()
     }
 
@@ -98,6 +105,56 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun setupSortListener() {
+        mainBinding.sortText.setOnClickListener {
+            mainBinding.sortSpinner.performClick()
+        }
+    }
+
+    private fun setupSortSpinner() {
+        val arrayString = resources.getStringArray(R.array.sort_array).asList()
+        val walletToDataAdapter = BaseDropDownAdapter(
+            this,
+            android.R.layout.simple_spinner_item,
+            arrayString
+        )
+
+        mainBinding.sortSpinner.adapter = walletToDataAdapter
+        mainBinding.sortSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+
+            }
+
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                when (position) {
+                    0 -> {
+                        sortEnum = SortEnum.DEFAULT
+                    }
+
+                    1 -> {
+                        sortEnum = SortEnum.NAME_ASC
+                    }
+
+                    2 -> {
+                        sortEnum = SortEnum.NAME_DESC
+                    }
+
+                    else -> {
+                        sortEnum = SortEnum.DEFAULT
+                    }
+                }
+                mainBinding.sortText.text = arrayString[position]
+                val arrayList = sortArrayList(pokemonList)
+                updateList(arrayList)
+            }
+        }
+    }
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
         return super.onCreateOptionsMenu(menu)
@@ -119,7 +176,8 @@ class MainActivity : AppCompatActivity() {
                     Status.SUCCESS -> {
                         toggleProgress(false)
                         toggleError(false)
-                        updateList(resource.data?.results.toCapitalise())
+                        val arrayList = sortArrayList(resource.data?.results.toCapitalise().assignIds())
+                        updateList(arrayList)
                     }
 
                     Status.ERROR -> {
@@ -147,6 +205,23 @@ class MainActivity : AppCompatActivity() {
     private fun toggleError(status: Boolean) {
         mainBinding.errorLayout.visibility = if (status) View.VISIBLE else View.GONE
         mainBinding.swipeRefreshLayout.isRefreshing = false
+    }
+
+    private fun sortArrayList(data: ArrayList<GeneralObject?>?):  ArrayList<GeneralObject?>?{
+        return when(sortEnum) {
+            SortEnum.DEFAULT -> {
+                data.sortById()
+            }
+            SortEnum.NAME_ASC -> {
+                data.sortByNameAscending()
+            }
+            SortEnum.NAME_DESC -> {
+                data.sortByNameDescending()
+            }
+            else -> {
+                data.sortById()
+            }
+        }
     }
 
 //    Update Current List With Returned Data

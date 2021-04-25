@@ -18,4 +18,10 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
+
+    <style name="spinnerstyle">
+        <item name="android:layout_marginLeft">30dp</item>
+        <item name="android:layout_marginRight">30dp</item>
+        <item name="android:popupBackground">@drawable/bg_dropdown</item>
+    </style>
 </resources>

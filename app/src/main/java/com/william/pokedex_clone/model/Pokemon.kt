@@ -5,7 +5,8 @@ import java.io.Serializable
 
 data class GeneralObject(
     var name: String?,
-    var url: String?
+    var url: String?,
+    var id: Int? = 0
 ): Serializable
 
 data class PokemonListCover(
