@@ -13,3 +13,7 @@ This is a PokeDex Clone which has the following functionality:
 3. Fresco for Image Download and Display
 4. LiveData, ViewModel and Data Binding for View Update Operation
 5. EventBus for View Update Upon Changes On Favourite List
+
+# Pokemon Data Source
+
+This project utilises the public data source from [PokeAPI](https://pokeapi.co/).
