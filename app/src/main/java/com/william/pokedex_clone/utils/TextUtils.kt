@@ -17,10 +17,12 @@ fun ArrayList<GeneralObject?>?.toCapitalise(): ArrayList<GeneralObject?> {
 
 
 fun String.returnId(): String {
-    return if (URLUtil.isValidUrl(this)) {
-        val stringArray = this.split("/")
-        if (stringArray.isEmpty())
-            "0"
-        else stringArray[stringArray.size - 2]
-    } else "0"
+    return if (this.length > 7) {
+        if (this.substring(0, 8) == "https://" || this.substring(0,7) == "http://") {
+            val stringArray = this.split("/")
+            if (stringArray.isEmpty())
+                "0"
+            else stringArray[stringArray.size - 2]
+        } else "0"
+    } else ""
 }
